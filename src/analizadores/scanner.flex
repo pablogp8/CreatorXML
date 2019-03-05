@@ -6,7 +6,7 @@ import java.util.*;
 import creatorxml.*;
 %%
 
-%state COMENT, COMENT2, IMPTR
+%state COMENT, COMENT2, IMPTR, IMPTR2
 %class scanner
 %{String literal;
   String temp_include;
@@ -45,7 +45,7 @@ Espacio=([\ |\t|\f])
 FinL = \r|\n|\r\n
 Entrada = [^\r\n]
 st = [^\\\n\"]+ | [\\][\\] | "\\\"" | "\\\'" |"\\t"| "\\n" | "\\r" |"\\b" |"\n"
- 
+
 
 //FRASE=("_"|{ALPHA_NUMERIC})("_"|{ALPHA_NUMERIC})*
 
@@ -65,15 +65,17 @@ st = [^\\\n\"]+ | [\\][\\] | "\\\"" | "\\\'" |"\\t"| "\\n" | "\\r" |"\\b" |"\n"
 
 <YYINITIAL>"<Importar>"   { yybegin(IMPTR); System.out.println("Etiqueta importar"); return new Symbol(sym.importa, yyline, yychar,  yytext());}
 
-<IMPTR>"</Importar>"      { yybegin(YYINITIAL); System.out.println("Fin Etiqueta importar"); return new Symbol(sym.fimporta, yyline, yychar,  yytext());}
-<IMPTR>[^("</Importar>")]*	{System.out.println("DIRECCION: " + yytext());return new Symbol(sym.direcc, yyline, yychar,  yytext());}
+<IMPTR>"<"      { yybegin(IMPTR2); System.out.println("  ENTRO AL Fin Etiqueta importar"); return new Symbol(sym.fimporta, yyline, yychar,  yytext());}
+<IMPTR>[^"<"]*	{System.out.println("  DIRECCION: " + yytext());return new Symbol(sym.direcc, yyline, yychar,  yytext());}
+<IMPTR2>"/Importar>"    { yybegin(YYINITIAL); System.out.println("    Fin Etiqueta importar"); }
+<IMPTR2>[^"/Importar>"]* {System.out.println("    HAY ALGO MAS DE FIN");}
 
-<COMENT>"$#"		{yybegin(YYINITIAL); System.out.println("Fin comentario multilinea");}
-<COMENT>[^"$#"]*	{System.out.println("Comentario: " + yytext());}
-<COMENT2>{NLinea}	{yybegin(YYINITIAL); System.out.println("Fin comentario una linea");}
-<COMENT2>[^\n]*	{System.out.println("Comentario UNA LINEA: " + yytext());}
+<COMENT>"$#"		{yybegin(YYINITIAL); System.out.println("  Fin comentario multilinea");}
+<COMENT>[^"$#"]*	{System.out.println("  Comentario: " + yytext());}
+<COMENT2>{NLinea}	{yybegin(YYINITIAL); System.out.println("  Fin comentario una linea");}
+<COMENT2>[^\n]*	{System.out.println("  Comentario UNA LINEA: " + yytext());}
 .		        {
-              System.out.println("error lexico en la fila "+yyline +" y en la columna " + yychar);
+              System.out.println("error lexico en la fila "+yyline +" y en la columna " + yytext());
 //interfaz.rotular("error lexico :"+  yytext()+" en la fila "+yyline +" y en la columna " + yychar);
 
 	          	}

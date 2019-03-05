@@ -5,6 +5,8 @@
  */
 package creatorxml;
 
+import java.io.*;
+import analizadores.*;
 /**
  *
  * @author pablojy
@@ -54,16 +56,16 @@ public class ventIni extends javax.swing.JFrame {
                         .addGap(201, 201, 201)
                         .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(117, 117, 117)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(145, Short.MAX_VALUE))
+                        .addGap(44, 44, 44)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 398, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(42, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(78, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addContainerGap(37, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1)
                 .addGap(104, 104, 104))
         );
@@ -72,9 +74,22 @@ public class ventIni extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        jTextArea1.setText("Hola mundo");
+        //jTextArea1.setText("Hola mundo");
+        analisis(jTextArea1.getText());
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    
+    private void analisis(String codigo){
+        parser ThisParser;
+        scanner ThisScanner;
+        try{
+            ThisScanner = new scanner(new BufferedReader(new StringReader(codigo)));
+            ThisParser = new parser(ThisScanner);
+            ThisParser.parse();
+            System.out.println( "end of scanner/ salio bien"); 
+        }catch(Exception e){
+            System.out.println("se arruino en el proceso "+e.toString());
+        }
+    }
     /**
      * @param args the command line arguments
      */

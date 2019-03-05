@@ -1,0 +1,54 @@
+package analizadores;
+
+import java.io.*;
+import java.lang.*;
+import java_cup.runtime.*;
+import java_cup.runtime.Symbol;
+import java.util.ArrayList;
+import java.util.*;
+
+action code{:
+    void print(String msj)
+    {System.out.println(msj);}    
+:}
+
+parser code {: 
+	public void syntax_error(Symbol cur_token){System.out.println("va a ingresar el error sintactico "+ cur_token.value);
+if (cur_token.value!=null){
+//ventana1.ErroresM.add("Error Sintactico: "+ cur_token.value+ "\t\t" + (cur_token.right+1) + "\t\t" + cur_token.left+ "\n");
+
+}
+//interfaz.rotular("Toquen encontrado "+ cur_token.value);
+}
+
+public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
+//interfaz.rotular("errror  YA no se recupera");
+if (cur_token.value!=null){
+//ventana1.ErroresM.add("Error Sintactico Irrecuperable: "+ cur_token.value+ "\t\t" + (cur_token.right+1) + "\t\t" + cur_token.left+ "\n");
+
+}
+System.out.println("error  YA no se recupera");}
+
+public void semantic(Symbol cur_token,String n)
+{System.out.println("error semantico ");
+//ventana1.ErroresM.add("error lexico :"+ cur_token.value+ "\t\t" + (cur_token.right+1) + "\t\t" + cur_token.left+ "\n");
+}
+
+public void semantic(String msg, Object obj) {}:};
+
+terminal num, txtcom, coma, importa, fimporta, direcc;
+
+non terminal S, F, L, ETIQ;
+
+start with S;
+
+S ::= ETIQ:e F {:  RESULT=e.toString();:};
+
+ETIQ::= ETIQ importa direcc:e fimporta {:  RESULT=e.toString();:}
+    |importa direcc:e fimporta {:  RESULT=e.toString();:};
+
+F ::= F:e coma L:i {:RESULT=e.toString() + "," + i.toString();:}
+    |L:e {:RESULT=e.toString();:};
+
+L ::= num:e {:RESULT=e.toString();:}
+    |txtcom:e {:RESULT=e.toString();:};
