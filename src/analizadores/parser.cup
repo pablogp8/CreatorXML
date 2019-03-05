@@ -37,15 +37,28 @@ public void semantic(Symbol cur_token,String n)
 public void semantic(String msg, Object obj) {}:};
 
 terminal num, txtcom, coma, importa, fimporta, direcc;
+terminal eventana, ietiqueta, fetiqueta, eid, etipo, asigna, ecolor, eaccioni, eaccionf, funcionn, eventanaf;
 
 non terminal S, F, L, ETIQ;
+non terminal E, ELE, LELE;
 
 start with S;
 
-S ::= ETIQ:e F {:  RESULT=e.toString();:};
+S ::= ETIQ:e E {:  RESULT=e.toString();:};
 
 ETIQ::= ETIQ importa direcc:e fimporta {:  RESULT=e.toString();:}
     |importa direcc:e fimporta {:  RESULT=e.toString();:};
+
+E::= ietiqueta eventana ELE fetiqueta F eventanaf;
+
+ELE::= ELE LELE
+    |LELE;
+
+LELE::= eid asigna txtcom
+    |etipo asigna txtcom
+    |ecolor asigna txtcom
+    |eaccioni asigna funcionn
+    |eaccionf asigna funcionn;
 
 F ::= F:e coma L:i {:RESULT=e.toString() + "," + i.toString();:}
     |L:e {:RESULT=e.toString();:};
